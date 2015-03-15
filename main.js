@@ -21,8 +21,8 @@ var xy = undefined;
 var menuOpen = false;
 var menu = document.createElement('img');
 menu.setAttribute("src","images/menu.png");
-var menuWidth = window.innerWidth/6;
-menu.setAttribute("width",menuWidth);
+var menuSize = window.innerWidth/8;
+menu.setAttribute("width",menuSize);
 menu.style.userSelect = "none";
 //'<img id="menu" src="images/menu.png" width="80" alt="menu">',
 
@@ -31,7 +31,7 @@ addSurface2();
 //===========================================
  function addSurface1(){
      var surface1 = new Surface({
-         content:'tap<br>a ball',
+         content:'Tap<br>a ball',
          size: [xy,xy],
          properties: {
              backgroundColor: 'orange',
@@ -46,7 +46,6 @@ addSurface2();
  }
 //==========================================
 
-//=========================================== 
 function addSurface2(){
     var surface2 = new Surface({
         content: menu,
@@ -80,7 +79,7 @@ function addSurface2(){
  function getSurfaceWidth(){
      var x = 0;
      if(menuOpen){
-        x = window.innerWidth / 2;
+        x = window.innerWidth / (4/3);
      }
      else if(!menuOpen){
          x = 0;
@@ -95,15 +94,15 @@ var appWidth = 0;
 var appHeight = 0;
 var imageWidth = 50;
 var speed1 =1.75;
-var speed2 =1.76;
-var ball1Stopped = false;
+var speed2 =1.75001;
+var ball1Stopped = true;
 var ball1Snapshot = innerHeight/2;
-var ball2Stopped = false;
-var ball2Snapshot = innerHeight/2;
+var ball2Stopped = true;
+var ball2Snapshot = innerHeight/4;
 
 //////////////////////////////////////////////////////////////
 window.onresize = function(){
-    menuSize = window.innerWidth/6;
+    menuSize = window.innerWidth/8;
     menu.setAttribute("width",menuSize);
     //////////////////////////////
     appWidth = innerWidth;
@@ -134,7 +133,7 @@ var bouncer1 = new Modifier({
     transform : function () {
         var ticks = Date.now()/1000;
         var yPosition = (appHeight-imageWidth)*( 1 - Math.abs(Math.sin(speed1*ticks))) + imageWidth/9 ;       
-        var xPosition = appWidth/2 - imageWidth/2;
+        var xPosition = appWidth/4 - imageWidth/4;
         if(ball1Stopped){
             return Transform.translate( xPosition, ball1Snapshot ,0);            
         }
@@ -149,9 +148,9 @@ var bouncer2 = new Modifier({
     origin: [0, 0],
     align: [0, 0],
     transform : function () {
-        var ticks = Date.now()/999.99;
+        var ticks = Date.now()/999.999;
         var yPosition = (appHeight-imageWidth)*( 1 - Math.abs(Math.sin(speed2*ticks))) + imageWidth/9 ;       
-        var xPosition = appWidth/2.5 - imageWidth/2.5;
+        var xPosition = appWidth/3 - imageWidth/3;
         if(ball2Stopped){
             return Transform.translate( xPosition, ball2Snapshot ,0);            
         }
@@ -168,12 +167,6 @@ window.onload = function(){
     appHeight = innerHeight;
 }
 
-/*
-window.onresize = function(){
-    appWidth = innerWidth;
-    appHeight = innerHeight;
-}
-*/
 
 ball1.on("mouseover", function(){
     if(ball1Stopped){
