@@ -31,19 +31,22 @@ addSurface2();
 //===========================================
  function addSurface1(){
      var surface1 = new Surface({
-         content:'Hi there!',
+         content:'tap<br>a ball',
          size: [xy,xy],
          properties: {
              backgroundColor: 'orange',
              color: 'black',
              fontFamily: 'sans-serif',
              fontSize: '3rem',
-             padding: '50px'
+             padding: '50px',
+             zIndex: '0'
          }
      });  
     mainContext.add(surface1);
  }
- //=========================================== 
+//==========================================
+
+//=========================================== 
 function addSurface2(){
     var surface2 = new Surface({
         content: menu,
@@ -52,6 +55,7 @@ function addSurface2(){
             backgroundColor: 'blue',
             color: 'white',
             padding: '30px',
+             zIndex: '2',            
             boxShadow: '-5px 5px 20px black'         
         }
     });
@@ -85,10 +89,112 @@ function addSurface2(){
  }
  //===========================================
 menu.style.cursor="pointer";
+
+//////////////////////////////////////////////////////////
+var appWidth = 0;
+var appHeight = 0;
+var imageWidth = 50;
+var speed1 =1.75;
+var speed2 =1.76;
+var ball1Stopped = false;
+var ball1Snapshot = innerHeight/2;
+var ball2Stopped = false;
+var ball2Snapshot = innerHeight/2;
+
+//////////////////////////////////////////////////////////////
 window.onresize = function(){
     menuSize = window.innerWidth/6;
     menu.setAttribute("width",menuSize);
+    //////////////////////////////
+    appWidth = innerWidth;
+    appHeight = innerHeight;
+}
+//////////////////////////////////////////////////////
+var ball1 = new ImageSurface({
+    size: [0.9*imageWidth, 0.9*imageWidth],
+    content: 'images/blackball.png',
+    properties: {
+        visibility : 'visible',
+        zIndex: '1'
+    }
+});
+
+var ball2 = new ImageSurface({
+    size: [imageWidth, imageWidth],
+    content: 'images/blueball.png',
+    properties: {
+        visibility : 'visible',
+        zIndex: '1'
+    }
+});
+
+var bouncer1 = new Modifier({
+    origin: [0, 0],
+    align: [0, 0],
+    transform : function () {
+        var ticks = Date.now()/1000;
+        var yPosition = (appHeight-imageWidth)*( 1 - Math.abs(Math.sin(speed1*ticks))) + imageWidth/9 ;       
+        var xPosition = appWidth/2 - imageWidth/2;
+        if(ball1Stopped){
+            return Transform.translate( xPosition, ball1Snapshot ,0);            
+        }
+        else if(!ball1Stopped){
+            ball1Snapshot = yPosition;
+            return Transform.translate( xPosition, yPosition ,0);
+        }
+    }
+});
+
+var bouncer2 = new Modifier({
+    origin: [0, 0],
+    align: [0, 0],
+    transform : function () {
+        var ticks = Date.now()/999.99;
+        var yPosition = (appHeight-imageWidth)*( 1 - Math.abs(Math.sin(speed2*ticks))) + imageWidth/9 ;       
+        var xPosition = appWidth/2.5 - imageWidth/2.5;
+        if(ball2Stopped){
+            return Transform.translate( xPosition, ball2Snapshot ,0);            
+        }
+        else if(!ball2Stopped){
+            return Transform.translate( xPosition, yPosition ,0);
+            ball2Snapshot = yPosition;            
+        }
+    }
+});
+
+
+window.onload = function(){
+    appWidth = innerWidth;
+    appHeight = innerHeight;
 }
 
+/*
+window.onresize = function(){
+    appWidth = innerWidth;
+    appHeight = innerHeight;
+}
+*/
+
+ball1.on("mouseover", function(){
+    if(ball1Stopped){
+        ball1Stopped = false;        
+    }
+    else if(!ball1Stopped){
+        ball1Stopped = true;        
+    }    
+});
+
+ball2.on("mouseover", function(){
+    if(ball2Stopped){
+        ball2Stopped = false;        
+    }
+    else if(!ball2Stopped){
+        ball2Stopped = true;        
+    }    
+});
+
+//////////////////////////////////////////////////////////
+mainContext.add(bouncer1).add(ball1);
+mainContext.add(bouncer2).add(ball2);
  
  
