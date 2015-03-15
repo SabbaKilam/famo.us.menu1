@@ -79,7 +79,7 @@ function addSurface2(){
  function getSurfaceWidth(){
      var x = 0;
      if(menuOpen){
-        x = window.innerWidth / (4/3);
+        x = window.innerWidth / 2;
      }
      else if(!menuOpen){
          x = 0;
