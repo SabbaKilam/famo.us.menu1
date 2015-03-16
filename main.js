@@ -92,7 +92,7 @@ menu.style.cursor="pointer";
 //////////////////////////////////////////////////////////
 var appWidth = 0;
 var appHeight = 0;
-var imageWidth = 50;
+var imageWidth = 80;
 var speed1 =1.75;
 var speed2 =1.75001;
 var ball1Stopped = true;
